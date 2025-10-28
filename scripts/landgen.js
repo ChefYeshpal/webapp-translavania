@@ -29,7 +29,7 @@ class LandGenerator {
     }
     generateChunk(chunkX, chunkY) {
         const key = this.getChunkKey(chunkX, chunkY);
-        if (this.lloadedChunks.has(key)) {
+        if (this.loadedChunks.has(key)) {
             return;
         }
         this.loadedChunks.add(key);
@@ -68,8 +68,58 @@ class LandGenerator {
                 width: 32,
                 height: 24,
                 image: this.images[`bush${bushType}`],
+                type: 'bush',
                 sortY: y + 24
             });
         }
+
+        // Grass
+        const grassCount = 8 + Math.floor(this.seededRandom(seed + 1000) * 5);
+        for (let i = 0; i < grassCount; i++) {
+            const grassSeed = seed + 1000 + i * 100;
+            const x = startX + this.seededRandom(grassSeed) * this.chunkSize;
+            const y = startY + this.seededRandom(grassSeed + 1) * this.chunkSize;
+            
+            this.objects.push({
+                x: x,
+                y: y,
+                width: 16,
+                height: 16,
+                image: this.images.grass,
+                type: 'grass',
+                sortY: y + 16
+            });
+        }
+    }
+
+    updateChunks(cameraX, cameraY, screenWidth, screenHeight) {
+        const chunkX = Math.floor(cameraX / this.chunkSize);
+        const chunkY = Math.floor(cameraY / this.chunkSize);
+        for (let x = chunkX - 1; x <= chunkX + 1; x++) {
+            for (let y = chunkY - 1; y <= chunkY + 1; y++) {
+                this.generateChunk(x, y);
+            }
+        }
+    }
+
+    draw(ctx, cameraX, cameraY, screenWidth, screenHeight, playerY) {
+        const visibleObjects = this.objects.filter(obj => {
+            return obj.x + obj.width > cameraX &&
+                   obj.x < cameraX + screenWidth &&
+                   obj.y + obj.height > cameraY &&
+                   obj.y < cameraY + screenHeight;
+        });
+
+        // Sort by Y position for proper depth
+        visibleObjects.sort((a, b) => a.sortY - b.sortY);
+        visibleObjects.forEach(obj => {
+            ctx.drawImage(
+                obj.image,
+                obj.x - cameraX,
+                obj.y - cameraY,
+                obj.width,
+                obj.height
+            );
+        });
     }
 }
