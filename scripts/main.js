@@ -7,7 +7,6 @@ const landGen = new LandGenerator();
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
 
-// Input handling
 window.addEventListener('keydown', (e) => {
     player.handleKeyDown(e.key);
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
