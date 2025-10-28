@@ -3,9 +3,15 @@ const ctx = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
 const player = new Player(400, 300);
+const mrBob = new MrBob();
 const landGen = new LandGenerator();
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
+
+// Ans function, they gotta use this to answer hehehehehehe
+window.ans = function(answer) {
+    mrBob.respondToPlayer(answer);
+};
 
 window.addEventListener('keydown', (e) => {
     player.handleKeyDown(e.key);
@@ -24,17 +30,19 @@ function gameLoop() {
     // center cam on player
     cameraX = player.x - canvas.width / 2;
     cameraY = player.y - canvas.height / 2;
+    mrBob.update(player, landGen, cameraX, cameraY, canvas.width, canvas.height);
     landGen.updateChunks(cameraX, cameraY, canvas.width, canvas.height);
     ctx.fillStyle = '#4a7c2e';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     landGen.draw(ctx, cameraX, cameraY, canvas.width, canvas.height, player.y);
     player.draw(ctx, cameraX, cameraY);
+    mrBob.draw(ctx, cameraX, cameraY);
     
     requestAnimationFrame(gameLoop);
 }
 
 let imagesLoaded = 0;
-const totalImages = 7;
+const totalImages = 8;
 
 function checkImagesLoaded() {
     imagesLoaded++;
@@ -49,6 +57,16 @@ if (player.image.complete) {
 } else {
     player.image.addEventListener('load', () => {
         player.imageLoaded = true;
+        checkImagesLoaded();
+    });
+}
+
+if (mrBob.image.complete) {
+    mrBob.imageLoaded = true;
+    checkImagesLoaded();
+} else {
+    mrBob.image.addEventListener('load', () => {
+        mrBob.imageLoaded = true;
         checkImagesLoaded();
     });
 }
