@@ -21,4 +21,8 @@
         - Added player movement
         - Added camera movement
             - So player is always in center
+    - Added mr bob
+        - Dialogue
+        - Appearance
+- 29 Oct 2025
     - 
