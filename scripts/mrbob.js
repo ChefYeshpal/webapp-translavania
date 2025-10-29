@@ -16,6 +16,8 @@ class MrBob {
         this.dialogueShown = false;
         this.consoleInstructionShown = false;
         this.conversationState = 'initial';
+        this.isMoving = false;
+        this.moveSpeed = 1.5;
     }
 
     respondToPlayer(answer) {
@@ -24,45 +26,56 @@ class MrBob {
         switch(this.conversationState) {
             case 'initial':
                 if (lowerAnswer.includes('yes') || lowerAnswer.includes('yeah') || lowerAnswer.includes('lost')) {
-                    console.log("Mr. Bob: Oh dear! Well, this forest can be quite confusing. Would you like some help finding your way?");
-                    this.conversationState = 'offer_help';
+                    console.log("Mr. Bob: Oh dear... this forest can be quite confusing, can't it?");
+                    console.log("Mr. Bob: People wander in here all the time... not many find their way out alone.");
+                    this.conversationState = 'path1';
                 } else if (lowerAnswer.includes('no') || lowerAnswer.includes('not')) {
-                    console.log("Mr. Bob: Ah, just exploring then? That's brave of you. This place has many secrets...");
-                    this.conversationState = 'exploring';
+                    console.log("Mr. Bob: Ah, just exploring then? How... interesting.");
+                    console.log("Mr. Bob: Though I wonder... do you truly know where you're going?");
+                    this.conversationState = 'path2';
                 } else {
                     console.log("Mr. Bob: Hmm, I'm not sure I understand. (Try answering with 'yes', 'yeah', 'lost' or 'no', 'not')");
                 }
                 break;
                 
-            case 'offer_help':
-                if (lowerAnswer.includes('yes') || lowerAnswer.includes('please') || lowerAnswer.includes('help')) {
-                    console.log("Mr. Bob: Wonderful! Head north past the big oak tree, then follow the mushrooms. Good luck, traveler!");
-                    this.conversationState = 'helped';
-                } else if (lowerAnswer.includes('no') || lowerAnswer.includes('nah')) {
-                    console.log("Mr. Bob: Suit yourself! But if you change your mind, you know where to find me.");
-                    this.conversationState = 'declined_help';
+            case 'path1':
+                console.log("Mr. Bob: You know, I've been watching travelers like you for quite some time...");
+                console.log("Mr. Bob: I really think I should help you. After all, it would be such a shame if something happened to you out here.");
+                this.conversationState = 'final_offer';
+                break;
+                
+            case 'path2':
+                console.log("Mr. Bob: This forest... it changes people. Makes them think they're in control when they're not.");
+                console.log("Mr. Bob: But don't worry, I can guide you. I know every tree, every shadow...");
+                this.conversationState = 'final_offer';
+                break;
+                
+            case 'final_offer':
+                if (lowerAnswer.includes('yes') || lowerAnswer.includes('ok') || lowerAnswer.includes('okay')) {
+                    console.log("Mr. Bob: Excellent... I knew you'd see things my way.");
+                    console.log("Mr. Bob: Well then! How about you follow me...");
+                    this.conversationState = 'moving';
+                    this.isMoving = true;
                 } else {
-                    console.log("Mr. Bob: Hmm, I'm not sure I understand. (Try answering with 'yes', 'please', 'help' or 'no', 'nah')");
+                    console.log("Mr. Bob: So, I'll help you, please? It'll be my pleasure...");
+                    console.log("Mr. Bob: You don't really have much of a choice, do you?");
                 }
                 break;
                 
-            case 'exploring':
-                console.log("Mr. Bob: Be careful out here. Not everything is as it seems... Safe travels, friend.");
-                this.conversationState = 'ended';
-                break;
-                
-            default:
+            case 'moving':
                 const endingDialogues = [
-                    "Mr. Bob: I've said all I need to say. Good luck on your journey!",
-                    "Mr. Bob: The forest holds many mysteries... perhaps we'll meet again.",
-                    "Mr. Bob: I must return to my duties now. Farewell, traveler.",
-                    "Mr. Bob: The trees are calling me. Safe travels, friend.",
-                    "Mr. Bob: Our conversation has come to an end. May the forest guide you.",
-                    "Mr. Bob: I have nothing more to share at this time. Take care out there.",
-                    "Mr. Bob: *tips imagginary fedora* Until next time, wanderer."
+                    "Mr. Bob: Just a bit further now...",
+                    "Mr. Bob: The path reveals itself to those who follow...",
+                    "Mr. Bob: You're doing wonderfully...",
+                    "Mr. Bob: We're almost there...",
+                    "Mr. Bob: Trust me, just keep following..."
                 ];
                 const randomDialogue = endingDialogues[Math.floor(Math.random() * endingDialogues.length)];
                 console.log(randomDialogue);
+                break;
+                
+            default:
+                console.log("Mr. Bob: Our time together has been... enlightening.");
                 break;
         }
     }
@@ -108,7 +121,6 @@ class MrBob {
     }
 
     update(player, landGen, cameraX, cameraY, canvasWidth, canvasHeight) {
-        // Spawn Mr. Bob on first update
         if (!this.hasAppeared) {
             const visibleTrees = [];
             for (const chunkKey in landGen.chunks) {
@@ -122,7 +134,12 @@ class MrBob {
             this.spawnBesideNearestTree(visibleTrees, player);
         }
         
-        this.interactWithPlayer(player);
+        if (this.isMoving) {
+            this.x += this.moveSpeed * Math.cos(Math.PI / 4);
+            this.y -= this.moveSpeed * Math.sin(Math.PI / 4);
+        } else {
+            this.interactWithPlayer(player);
+        }
     }
 
     draw(ctx, cameraX, cameraY) {
