@@ -3,7 +3,9 @@ const ctx = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
 const player = new Player(400, 300);
+const dawg = new Dawg();
 const mrBob = new MrBob();
+mrBob.setDawg(dawg);
 const landGen = new LandGenerator();
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
@@ -36,13 +38,14 @@ function gameLoop() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     landGen.draw(ctx, cameraX, cameraY, canvas.width, canvas.height, player.y);
     player.draw(ctx, cameraX, cameraY);
+    dawg.draw(ctx, cameraX, cameraY);
     mrBob.draw(ctx, cameraX, cameraY);
     
     requestAnimationFrame(gameLoop);
 }
 
 let imagesLoaded = 0;
-const totalImages = 8;
+const totalImages = 9;
 
 function checkImagesLoaded() {
     imagesLoaded++;
@@ -67,6 +70,16 @@ if (mrBob.image.complete) {
 } else {
     mrBob.image.addEventListener('load', () => {
         mrBob.imageLoaded = true;
+        checkImagesLoaded();
+    });
+}
+
+if (dawg.image.complete) {
+    dawg.imageLoaded = true;
+    checkImagesLoaded();
+} else {
+    dawg.image.addEventListener('load', () => {
+        dawg.imageLoaded = true;
         checkImagesLoaded();
     });
 }

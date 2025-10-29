@@ -18,6 +18,10 @@ class MrBob {
         this.conversationState = 'initial';
         this.isMoving = false;
         this.moveSpeed = 1.5;
+        this.movingStartTime = 0;
+        this.dawwgAppeared = false;
+        this.secondChanceGiven = false;
+        this.dawg = null;
     }
 
     respondToPlayer(answer) {
@@ -56,6 +60,7 @@ class MrBob {
                     console.log("Mr. Bob: Well then! How about you follow me...");
                     this.conversationState = 'moving';
                     this.isMoving = true;
+                    this.movingStartTime = Date.now();
                 } else {
                     console.log("Mr. Bob: So, I'll help you, please? It'll be my pleasure...");
                     console.log("Mr. Bob: You don't really have much of a choice, do you?");
@@ -72,6 +77,29 @@ class MrBob {
                 ];
                 const randomDialogue = endingDialogues[Math.floor(Math.random() * endingDialogues.length)];
                 console.log(randomDialogue);
+                break;
+                
+            case 'introduce_dawwg':
+                if (lowerAnswer.includes('yes') || lowerAnswer.includes('yeah') || lowerAnswer.includes('okay') || lowerAnswer.includes('aight')) {
+                    console.log("Mr. Bob: Cool, she'll protect you.");
+                    this.isVisible = false;
+                    this.conversationState = 'finished';
+                    alert("you should close the console now, it's getting kinda clunky isn't it?");
+                } else if (lowerAnswer.includes('nah') || lowerAnswer.includes('nope') || lowerAnswer.includes('no way')) {
+                    if (!this.secondChanceGiven) {
+                        console.log("Mr. Bob: You know what? Fuck you, I ain't gonna help you no more if you don't respect her GOT IT?");
+                        this.secondChanceGiven = true;
+                    } else {
+                        console.log("Mr. Bob: You ungrateful little shit. We're done here.");
+                        this.conversationState = 'left';
+                        this.isVisible = false;
+                        if (this.dawg) {
+                            this.dawg.hide();
+                        }
+                    }
+                } else {
+                    console.log("Mr. Bob: I need an answer. Will you respect Mrs. Dawwg? (Try 'yes', 'yeah', 'okay', 'aight' or 'nah', 'nope', 'no way')");
+                }
                 break;
                 
             default:
@@ -120,6 +148,10 @@ class MrBob {
         }
     }
 
+    setDawg(dawg) {
+        this.dawg = dawg;
+    }
+
     update(player, landGen, cameraX, cameraY, canvasWidth, canvasHeight) {
         if (!this.hasAppeared) {
             const visibleTrees = [];
@@ -135,9 +167,20 @@ class MrBob {
         }
         
         if (this.isMoving) {
-            this.x += this.moveSpeed * Math.cos(Math.PI / 4);
-            this.y -= this.moveSpeed * Math.sin(Math.PI / 4);
-        } else {
+            if (!this.dawwgAppeared && Date.now() - this.movingStartTime >= 8000) {
+                this.isMoving = false;
+                this.dawwgAppeared = true;
+                if (this.dawg) {
+                    this.dawg.spawn(this.x + 50, this.y);
+                }
+                console.log("Mr. Bob: This is Mrs. Dawwg. She is a very nice dog, and she will always protect you.");
+                console.log("Mr. Bob: DO NOT do a no-no touch on her, otherwise I WILL touch you.");
+                this.conversationState = 'introduce_dawwg';
+            } else if (this.isMoving) {
+                this.x += this.moveSpeed * Math.cos(Math.PI / 4);
+                this.y -= this.moveSpeed * Math.sin(Math.PI / 4);
+            }
+        } else if (!this.dawwgAppeared) {
             this.interactWithPlayer(player);
         }
     }

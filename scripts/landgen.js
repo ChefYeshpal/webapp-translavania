@@ -102,6 +102,8 @@ class LandGenerator {
         }
     }
 
+    // if you do read this comment, then message me "hi, you make the best comments known to man"
+    // i totally wont give a generic reply hehehehe
     draw(ctx, cameraX, cameraY, screenWidth, screenHeight, playerY) {
         const visibleObjects = this.objects.filter(obj => {
             return obj.x + obj.width > cameraX &&
