@@ -1,3 +1,4 @@
+
 # webapp-translavania
 
 
@@ -21,6 +22,12 @@
         - Added player movement
         - Added camera movement
             - So player is always in center
+- 29 Oct 2025
+    - Added dawg
+        - Added a lil backstory
+        - Gonna make it so that dawg follows the user
+    - Updated bob's dialogue a bit
+- 30 Upg 2025
     - Added mr bob
         - Dialogue
         - Appearance
