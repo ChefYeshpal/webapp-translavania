@@ -22,6 +22,26 @@ class MrBob {
         this.dawwgAppeared = false;
         this.secondChanceGiven = false;
         this.dawg = null;
+        this.inputBoxShown = false;
+    }
+
+    showInputBox() {
+        const inputContainer = document.getElementById('mrBobInput');
+        if (inputContainer) {
+            inputContainer.style.display = 'flex';
+            this.inputBoxShown = true;
+        }
+    }
+
+    handleInputSubmit() {
+        const inputField = document.getElementById('mrBobInputField');
+        const answer = inputField.value.trim();
+        
+        if (answer) {
+            console.log(`You: ${answer}`);
+            this.respondToPlayer(answer);
+            inputField.value = '';
+        }
     }
 
     respondToPlayer(answer) {
@@ -85,6 +105,7 @@ class MrBob {
                     this.isVisible = false;
                     this.conversationState = 'finished';
                     alert("you should close the console now, it's getting kinda clunky isn't it?");
+                    this.showInputBox();
                 } else if (lowerAnswer.includes('nah') || lowerAnswer.includes('nope') || lowerAnswer.includes('no way')) {
                     if (!this.secondChanceGiven) {
                         console.log("Mr. Bob: You know what? Fuck you, I ain't gonna help you no more if you don't respect her GOT IT?");

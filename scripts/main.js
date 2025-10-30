@@ -91,3 +91,17 @@ Object.values(landGen.images).forEach(img => {
         img.addEventListener('load', checkImagesLoaded);
     }
 });
+
+// Input box
+const mrBobOkButton = document.getElementById('mrBobOkButton');
+const mrBobInputField = document.getElementById('mrBobInputField');
+
+mrBobOkButton.addEventListener('click', () => {
+    mrBob.handleInputSubmit();
+});
+
+mrBobInputField.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        mrBob.handleInputSubmit();
+    }
+});
