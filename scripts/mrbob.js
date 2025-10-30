@@ -104,7 +104,14 @@ class MrBob {
                     console.log("Mr. Bob: Cool, she'll protect you.");
                     this.isVisible = false;
                     this.conversationState = 'finished';
+                    // this is for that VERY SPECIFIC BUX FIX where the users avatar keeps going forwards even after the dialogue box closes, DO NOT DELETE THIS
+                    if (window.player) {
+                        window.player.clearAllKeys();
+                    }
                     alert("you should close the console now, it's getting kinda clunky isn't it?");
+                    if (window.player) {
+                        window.player.clearAllKeys();
+                    }
                     this.showInputBox();
                 } else if (lowerAnswer.includes('nah') || lowerAnswer.includes('nope') || lowerAnswer.includes('no way')) {
                     if (!this.secondChanceGiven) {
@@ -159,7 +166,9 @@ class MrBob {
 
         if (distance < this.interactionDistance) {
             if (!this.consoleInstructionShown) {
+                player.clearAllKeys(); 
                 alert("go to inspect (right click) => go to console");
+                player.clearAllKeys();
                 this.consoleInstructionShown = true;
             } else if (!this.dialogueShown) {
                 console.log("Mr. Bob: hello, are you lost?");

@@ -9,6 +9,7 @@ mrBob.setDawg(dawg);
 const landGen = new LandGenerator();
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
+window.player = player;
 
 // Ans function, they gotta use this to answer hehehehehehe
 window.ans = function(answer) {

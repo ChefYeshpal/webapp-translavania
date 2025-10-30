@@ -34,6 +34,12 @@ class Player {
         }
     }
 
+    clearAllKeys() {
+        for (let key in this.keys) {
+            this.keys[key] = false;
+        }
+    }
+
     update() {
         if (this.keys.w || this.keys.ArrowUp) {
             this.y -= this.speed;
