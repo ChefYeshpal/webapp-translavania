@@ -30,6 +30,13 @@ class MrBob {
         if (inputContainer) {
             inputContainer.style.display = 'flex';
             this.inputBoxShown = true;
+            
+            // Start dawg dialogue after showing input box
+            if (this.dawg && this.conversationState === 'finished') {
+                setTimeout(() => {
+                    this.dawg.startDialogue();
+                }, 500);
+            }
         }
     }
 
@@ -38,9 +45,15 @@ class MrBob {
         const answer = inputField.value.trim();
         
         if (answer) {
-            console.log(`You: ${answer}`);
-            this.respondToPlayer(answer);
-            inputField.value = '';
+            if (this.conversationState === 'finished' && this.dawg) {
+                console.log(`You: ${answer}`);
+                this.dawg.respondToPlayer(answer);
+                inputField.value = '';
+            } else {
+                console.log(`You: ${answer}`);
+                this.respondToPlayer(answer);
+                inputField.value = '';
+            }
         }
     }
 

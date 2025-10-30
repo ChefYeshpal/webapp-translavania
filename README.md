@@ -31,4 +31,6 @@
         - Gonna make it so that dawg follows the user
     - Updated bob's dialogue a bit
 - 30 Oct 2025
-    - 
+    - Added a text input box
+    - Added dialogues for dawg
+    - Fixed a keypress bug for dialogue boxes

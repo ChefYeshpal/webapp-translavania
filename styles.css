@@ -22,6 +22,28 @@ body {
     background-color: #4a7c2e;
 }
 
+#dawgDialogue {
+    position: fixed;
+    bottom: 55px;
+    left: 15px;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 8px 12px;
+    border-radius: 2px;
+    backdrop-filter: blur(2px);
+    z-index: 1001;
+    max-width: 300px;
+}
+
+#dawgDialogueText {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
 #mrBobInput {
     position: fixed;
     bottom: 15px;
