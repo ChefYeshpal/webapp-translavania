@@ -7,6 +7,8 @@ const dawg = new Dawg();
 const mrBob = new MrBob();
 mrBob.setDawg(dawg);
 const landGen = new LandGenerator();
+const inputBox = new InputBox();
+inputBox.setMrBob(mrBob);
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
 window.player = player;
@@ -17,6 +19,10 @@ window.ans = function(answer) {
 };
 
 window.addEventListener('keydown', (e) => {
+    if (inputBox.isFocused()) {
+        return;
+    }
+    
     player.handleKeyDown(e.key);
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
@@ -24,6 +30,10 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
+    if (inputBox.isFocused()) {
+        return;
+    }
+    
     player.handleKeyUp(e.key);
 });
 
@@ -91,19 +101,5 @@ Object.values(landGen.images).forEach(img => {
         checkImagesLoaded();
     } else {
         img.addEventListener('load', checkImagesLoaded);
-    }
-});
-
-// Input box
-const mrBobOkButton = document.getElementById('mrBobOkButton');
-const mrBobInputField = document.getElementById('mrBobInputField');
-
-mrBobOkButton.addEventListener('click', () => {
-    mrBob.handleInputSubmit();
-});
-
-mrBobInputField.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        mrBob.handleInputSubmit();
     }
 });
