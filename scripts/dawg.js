@@ -15,6 +15,13 @@ class Dawg {
         this.dialogueStarted = false;
         this.isMoving = false;
         this.moveSpeed = 1.5;
+        this.moveStartTime = 0;
+        this.dragonEncounterTriggered = false;
+        this.dragon = null;
+    }
+
+    setDragon(dragon) {
+        this.dragon = dragon;
     }
 
     spawn(x, y) {
@@ -68,6 +75,7 @@ class Dawg {
                 }
                 this.conversationState = 'moving';
                 this.isMoving = true;
+                this.moveStartTime = Date.now();
                 
                 setTimeout(() => {
                     if (dialogueBox) {
@@ -80,6 +88,38 @@ class Dawg {
 
     update() {
         if (this.isMoving) {
+            const elapsedTime = Date.now() - this.moveStartTime;
+            
+            // Spawn dragon at 5 seconds (but keep it quiet)
+            if (!this.dragon.hasAppeared && elapsedTime >= 5000) {
+                this.dragon.spawn(this.x + 60, this.y - 30);
+            }
+            
+            // Trigger dialogue at 10 seconds
+            if (!this.dragonEncounterTriggered && elapsedTime >= 10000) {
+                this.dragonEncounterTriggered = true;
+                this.isMoving = false;
+            
+                const dawgDialogueBox = document.getElementById('dawgDialogue');
+                const dawgDialogueText = document.getElementById('dawgDialogueText');
+                if (dawgDialogueBox && dawgDialogueText) {
+                    dawgDialogueText.textContent = "oh hey, looks that's KNOCKOFF HEIDI!!!!";
+                    dawgDialogueBox.style.display = 'block';
+                }
+                
+                setTimeout(() => {
+                    if (this.dragon) {
+                        this.dragon.showDialogue("shut up dog, what's that?");
+                        
+                        setTimeout(() => {
+                            this.dragon.showOptions();
+                        }, 2000);
+                    }
+                }, 1500);
+                
+                return;
+            }
+            
             // northeast (positive x, negative y)
             this.x += this.moveSpeed * Math.cos(-Math.PI / 4);
             this.y += this.moveSpeed * Math.sin(-Math.PI / 4);
