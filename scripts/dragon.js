@@ -28,13 +28,24 @@ class Dragon {
     }
 
     showDialogue(text) {
+        this.addMessage(text);
+    }
+    
+    addMessage(text) {
         const dialogueBox = document.getElementById('dragonDialogue');
-        const dialogueText = document.getElementById('dragonDialogueText');
+        if (!dialogueBox) return;
         
-        if (dialogueBox && dialogueText) {
-            dialogueText.textContent = text;
-            dialogueBox.style.display = 'block';
-        }
+        const messageElement = document.createElement('div');
+        messageElement.className = 'dragon-message';
+        messageElement.textContent = text;
+        
+        dialogueBox.appendChild(messageElement);
+        
+        setTimeout(() => {
+            if (messageElement.parentNode) {
+                messageElement.remove();
+            }
+        }, 5300);
     }
 
     hideDialogue() {
@@ -56,10 +67,10 @@ class Dragon {
     
     handleChoice(choice) {
         if (choice === 1) {
-            this.showDialogue("who are you? why are you evne here huh?");
+            this.addMessage("who are you? why are you evne here huh?");
             this.conversationState = 'greeted';
         } else if (choice === 2) {
-            this.showDialogue("and... who's that person? what are they doing here?");
+            this.addMessage("and... who's that person? what are they doing here?");
             this.conversationState = 'silent';
         }
     }

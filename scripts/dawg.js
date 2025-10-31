@@ -43,45 +43,46 @@ class Dawg {
 
     showDialogue() {
         const dialogueBox = document.getElementById('dawgDialogue');
-        const dialogueText = document.getElementById('dawgDialogueText');
         
-        if (dialogueBox && dialogueText) {
-            dialogueText.textContent = "sup human, how's it all goin?";
-            dialogueBox.style.display = 'block';
+        if (dialogueBox) {
+            this.addMessage("sup human, how's it all goin?");
             
-            // Show input box for user response
             const inputContainer = document.getElementById('mrBobInput');
             if (inputContainer) {
                 inputContainer.style.display = 'flex';
             }
         }
     }
+    
+    addMessage(text) {
+        const dialogueBox = document.getElementById('dawgDialogue');
+        if (!dialogueBox) return;
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = 'dawg-message';
+        messageElement.textContent = text;
+        
+        dialogueBox.appendChild(messageElement);
+        
+        setTimeout(() => {
+            if (messageElement.parentNode) {
+                messageElement.remove();
+            }
+        }, 5300);
+    }
 
     respondToPlayer(answer) {
-        const dialogueBox = document.getElementById('dawgDialogue');
-        const dialogueText = document.getElementById('dawgDialogueText');
-        
         switch(this.conversationState) {
             case 'initial':
-                if (dialogueText) {
-                    dialogueText.textContent = "I dont care tbh, but lemme take you somewhere hmm?";
-                }
+                this.addMessage("I dont care tbh, but lemme take you somewhere hmm?");
                 this.conversationState = 'waiting_for_next';
                 break;
                 
             case 'waiting_for_next':
-                if (dialogueText) {
-                    dialogueText.textContent = "eh, follow me aight? we aint going too far";
-                }
+                this.addMessage("eh, follow me aight? we aint going too far");
                 this.conversationState = 'moving';
                 this.isMoving = true;
                 this.moveStartTime = Date.now();
-                
-                setTimeout(() => {
-                    if (dialogueBox) {
-                        dialogueBox.style.display = 'none';
-                    }
-                }, 2000);
                 break;
         }
     }
@@ -90,37 +91,55 @@ class Dawg {
         if (this.isMoving) {
             const elapsedTime = Date.now() - this.moveStartTime;
             
-            // Spawn dragon at 5 seconds (but keep it quiet)
+            const totalMoveTime = 10000;
+            const destinationX = this.x + (this.moveSpeed * Math.cos(-Math.PI / 4) * (totalMoveTime / 16.67));
+            const destinationY = this.y + (this.moveSpeed * Math.sin(-Math.PI / 4) * (totalMoveTime / 16.67));
+            
             if (!this.dragon.hasAppeared && elapsedTime >= 5000) {
-                this.dragon.spawn(this.x + 60, this.y - 30);
+                this.dragon.spawn(destinationX + 80, destinationY - 40);
             }
             
-            // Trigger dialogue at 10 seconds
             if (!this.dragonEncounterTriggered && elapsedTime >= 10000) {
                 this.dragonEncounterTriggered = true;
                 this.isMoving = false;
-            
-                const dawgDialogueBox = document.getElementById('dawgDialogue');
-                const dawgDialogueText = document.getElementById('dawgDialogueText');
-                if (dawgDialogueBox && dawgDialogueText) {
-                    dawgDialogueText.textContent = "oh hey, looks that's KNOCKOFF HEIDI!!!!";
-                    dawgDialogueBox.style.display = 'block';
-                }
+                
+                this.addMessage("oh hey, looks that's KNOCKOFF HEIDI!!!!");
                 
                 setTimeout(() => {
                     if (this.dragon) {
-                        this.dragon.showDialogue("shut up dog, what's that?");
+                        this.dragon.addMessage("shut up dog, what's that?");
+                    }
+                    
+                    setTimeout(() => {
+                        this.addMessage("That's dragon (ingenious name), and she's a knockoff of a racoon who's a dragon");
                         
                         setTimeout(() => {
-                            this.dragon.showOptions();
-                        }, 2000);
-                    }
+                            if (this.dragon) {
+                                this.dragon.addMessage("SHUT UP WILL YOU");
+                            }
+                            
+                            setTimeout(() => {
+                                this.addMessage("anyways, she's a cool species, just dont try to skibdi rizz her will you?");
+                                
+                                setTimeout(() => {
+                                    if (this.dragon) {
+                                        this.dragon.addMessage("who is that thing anyways?");
+                                    }
+                                    
+                                    setTimeout(() => {
+                                        if (this.dragon) {
+                                            this.dragon.showOptions();
+                                        }
+                                    }, 2000);
+                                }, 2500);
+                            }, 2000);
+                        }, 2500);
+                    }, 2000);
                 }, 1500);
                 
                 return;
             }
             
-            // northeast (positive x, negative y)
             this.x += this.moveSpeed * Math.cos(-Math.PI / 4);
             this.y += this.moveSpeed * Math.sin(-Math.PI / 4);
         }

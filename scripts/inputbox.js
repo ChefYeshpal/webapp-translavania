@@ -9,6 +9,7 @@ class InputBox {
         this.dragon = null;
         this.isInputFocused = false;
         this.optionsMode = false;
+        this.selectedOption = null;
         
         this.setupEventListeners();
     }
@@ -24,13 +25,16 @@ class InputBox {
     showOptions(option1Text, option2Text, callback) {
         this.hideInput();
         this.optionsMode = true;
+        this.selectedOption = null;
         
         if (this.option1Button && this.option2Button && this.optionSelector) {
             this.option1Button.textContent = option1Text;
             this.option2Button.textContent = option2Text;
             this.optionSelector.style.display = 'flex';
+        
+            this.option1Button.classList.remove('selected');
+            this.option2Button.classList.remove('selected');
             
-            // Store callback for option selection
             this.optionCallback = callback;
         }
     }
@@ -40,6 +44,35 @@ class InputBox {
             this.optionSelector.style.display = 'none';
         }
         this.optionsMode = false;
+        this.selectedOption = null;
+        
+        if (this.option1Button && this.option2Button) {
+            this.option1Button.classList.remove('selected');
+            this.option2Button.classList.remove('selected');
+        }
+    }
+    
+    selectOption(optionNumber) {
+        if (!this.optionsMode) return;
+        
+        this.selectedOption = optionNumber;
+    
+        if (optionNumber === 1) {
+            this.option1Button.classList.add('selected');
+            this.option2Button.classList.remove('selected');
+        } else if (optionNumber === 2) {
+            this.option2Button.classList.add('selected');
+            this.option1Button.classList.remove('selected');
+        }
+    }
+    
+    confirmOption() {
+        if (!this.optionsMode || this.selectedOption === null) return;
+        
+        if (this.optionCallback) {
+            this.optionCallback(this.selectedOption);
+            this.hideOptions();
+        }
     }
     
     showInput() {
@@ -73,26 +106,30 @@ class InputBox {
             }
         });
         
-        // Option button event listeners
         if (this.option1Button) {
             this.option1Button.addEventListener('click', () => {
-                if (this.optionCallback) {
-                    this.optionCallback(1);
-                    this.hideOptions();
-                }
+                this.selectOption(1);
             });
         }
         
         if (this.option2Button) {
             this.option2Button.addEventListener('click', () => {
-                if (this.optionCallback) {
-                    this.optionCallback(2);
-                    this.hideOptions();
-                }
+                this.selectOption(2);
             });
         }
         
-        // Track when input is focused
+        document.addEventListener('keydown', (e) => {
+            if (this.optionsMode) {
+                if (e.key === '1') {
+                    this.selectOption(1);
+                } else if (e.key === '2') {
+                    this.selectOption(2);
+                } else if (e.key === 'Enter') {
+                    this.confirmOption();
+                }
+            }
+        });
+        
         this.mrBobInputField.addEventListener('focus', () => {
             this.isInputFocused = true;
         });
