@@ -13,6 +13,8 @@ class Dawg {
         this.isVisible = false;
         this.conversationState = 'initial';
         this.dialogueStarted = false;
+        this.isMoving = false;
+        this.moveSpeed = 1.5;
     }
 
     spawn(x, y) {
@@ -61,10 +63,26 @@ class Dawg {
                 break;
                 
             case 'waiting_for_next':
-                if (dialogueBox) {
-                    dialogueBox.style.display = 'none';
+                if (dialogueText) {
+                    dialogueText.textContent = "eh, follow me aight? we aint going too far";
                 }
+                this.conversationState = 'moving';
+                this.isMoving = true;
+                
+                setTimeout(() => {
+                    if (dialogueBox) {
+                        dialogueBox.style.display = 'none';
+                    }
+                }, 2000);
                 break;
+        }
+    }
+
+    update() {
+        if (this.isMoving) {
+            // northeast (positive x, negative y)
+            this.x += this.moveSpeed * Math.cos(-Math.PI / 4);
+            this.y += this.moveSpeed * Math.sin(-Math.PI / 4);
         }
     }
 

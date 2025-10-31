@@ -34,6 +34,7 @@ function gameLoop() {
     cameraX = player.x - canvas.width / 2;
     cameraY = player.y - canvas.height / 2;
     mrBob.update(player, landGen, cameraX, cameraY, canvas.width, canvas.height);
+    dawg.update();
     landGen.updateChunks(cameraX, cameraY, canvas.width, canvas.height);
     ctx.fillStyle = '#4a7c2e';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
