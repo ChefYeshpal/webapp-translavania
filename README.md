@@ -43,3 +43,4 @@
     - Updated a few visuals
 - 1 Nov 2025
     - Updated the dialogue system a LOT more
+    - Added some more lore, I think there's a lotta characters but anyways....
