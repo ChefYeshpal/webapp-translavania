@@ -8,6 +8,7 @@ const dragon = new Dragon();
 const mrBob = new MrBob();
 mrBob.setDawg(dawg);
 dawg.setDragon(dragon);
+dragon.setDawg(dawg);
 const landGen = new LandGenerator();
 const inputBox = new InputBox();
 inputBox.setMrBob(mrBob);
@@ -17,10 +18,20 @@ let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
 window.player = player;
 
-// Ans function, they gotta use this to answer hehehehehehe
 window.ans = function(answer) {
     mrBob.respondToPlayer(answer);
 };
+
+const darknessOverlay = document.getElementById('darknessOverlay');
+window.addEventListener('mousemove', (e) => {
+    if (darknessOverlay && darknessOverlay.style.display !== 'none') {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        darknessOverlay.style.setProperty('--mouse-x', `${x}px`);
+        darknessOverlay.style.setProperty('--mouse-y', `${y}px`);
+    }
+});
 
 window.addEventListener('keydown', (e) => {
     if (inputBox.isFocused()) {
@@ -30,6 +41,14 @@ window.addEventListener('keydown', (e) => {
     player.handleKeyDown(e.key);
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
+    }
+    
+    if (darknessOverlay && darknessOverlay.style.display !== 'none') {
+        const rect = canvas.getBoundingClientRect();
+        const centerX = rect.left + canvas.width / 2;
+        const centerY = rect.top + canvas.height / 2;
+        darknessOverlay.style.setProperty('--mouse-x', `${centerX}px`);
+        darknessOverlay.style.setProperty('--mouse-y', `${centerY}px`);
     }
 });
 
@@ -44,9 +63,17 @@ window.addEventListener('keyup', (e) => {
 function gameLoop() {
     player.update();
     
-    // center cam on player
     cameraX = player.x - canvas.width / 2;
     cameraY = player.y - canvas.height / 2;
+    
+    if (darknessOverlay && darknessOverlay.style.display !== 'none') {
+        const rect = canvas.getBoundingClientRect();
+        const screenX = rect.left + canvas.width / 2;
+        const screenY = rect.top + canvas.height / 2;
+        darknessOverlay.style.setProperty('--mouse-x', `${screenX}px`);
+        darknessOverlay.style.setProperty('--mouse-y', `${screenY}px`);
+    }
+    
     mrBob.update(player, landGen, cameraX, cameraY, canvas.width, canvas.height);
     dawg.update();
     landGen.updateChunks(cameraX, cameraY, canvas.width, canvas.height);

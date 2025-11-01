@@ -152,4 +152,34 @@ class Dawg {
             );
         }
     }
+    
+    afterDragonLeaves() {
+        this.addMessage("wowzers... that was a rollercoster huh...");
+        
+        setTimeout(() => {
+            this.addMessage("anyways, she forgot to tell you to stay away from trees during the night");
+            
+            setTimeout(() => {
+                this.addMessage("I honestly prefer to burrow into a hole and stay there...");
+                
+                setTimeout(() => {
+                    if (this.dragon && this.dragon.inputBox) {
+                        this.dragon.inputBox.showOptions(
+                            "1. okay...",
+                            "2. can I come in your hole?",
+                            (choice) => this.handleHoleChoice(choice)
+                        );
+                    }
+                }, 2000);
+            }, 2500);
+        }, 2000);
+    }
+    
+    handleHoleChoice(choice) {
+        if (choice === 1) {
+            this.addMessage("cool cool, you do you human");
+        } else if (choice === 2) {
+            this.addMessage("eww...");
+        }
+    }
 }
