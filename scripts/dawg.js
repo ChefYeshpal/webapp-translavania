@@ -42,7 +42,7 @@ class Dawg {
     }
 
     showDialogue() {
-        const dialogueBox = document.getElementById('dawgDialogue');
+        const dialogueBox = document.getElementById('unifiedDialogue');
         
         if (dialogueBox) {
             this.addMessage("sup human, how's it all goin?");
@@ -55,7 +55,7 @@ class Dawg {
     }
     
     addMessage(text) {
-        const dialogueBox = document.getElementById('dawgDialogue');
+        const dialogueBox = document.getElementById('unifiedDialogue');
         if (!dialogueBox) return;
         
         const messageElement = document.createElement('div');
@@ -64,11 +64,7 @@ class Dawg {
         
         dialogueBox.appendChild(messageElement);
         
-        setTimeout(() => {
-            if (messageElement.parentNode) {
-                messageElement.remove();
-            }
-        }, 5300);
+        dialogueBox.scrollTop = dialogueBox.scrollHeight;
     }
 
     respondToPlayer(answer) {
@@ -111,7 +107,7 @@ class Dawg {
                     }
                     
                     setTimeout(() => {
-                        this.addMessage("That's dragon (ingenious name), and she's a knockoff of a racoon who's a dragon");
+                        this.addMessage("That's dragon (i am so smort), and she's a knockoff of a racoon who's a dragon");
                         
                         setTimeout(() => {
                             if (this.dragon) {

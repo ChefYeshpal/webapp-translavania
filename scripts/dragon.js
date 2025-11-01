@@ -32,7 +32,7 @@ class Dragon {
     }
     
     addMessage(text) {
-        const dialogueBox = document.getElementById('dragonDialogue');
+        const dialogueBox = document.getElementById('unifiedDialogue');
         if (!dialogueBox) return;
         
         const messageElement = document.createElement('div');
@@ -41,15 +41,11 @@ class Dragon {
         
         dialogueBox.appendChild(messageElement);
         
-        setTimeout(() => {
-            if (messageElement.parentNode) {
-                messageElement.remove();
-            }
-        }, 5300);
+        dialogueBox.scrollTop = dialogueBox.scrollHeight;
     }
 
     hideDialogue() {
-        const dialogueBox = document.getElementById('dragonDialogue');
+        const dialogueBox = document.getElementById('unifiedDialogue');
         if (dialogueBox) {
             dialogueBox.style.display = 'none';
         }
