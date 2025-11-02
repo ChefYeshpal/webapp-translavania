@@ -181,5 +181,13 @@ class Dawg {
         } else if (choice === 2) {
             this.addMessage("eww...");
         }
+        
+        setTimeout(() => {
+            this.addMessage("anyways, it'll be night time soon...");
+            
+            setTimeout(() => {
+                this.addMessage("I wont be around you then, but you should heed dragon and my warnings");
+            }, 2000);
+        }, 2000);
     }
 }
