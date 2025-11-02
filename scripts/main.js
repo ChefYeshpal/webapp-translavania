@@ -9,6 +9,7 @@ const mrBob = new MrBob();
 mrBob.setDawg(dawg);
 dawg.setDragon(dragon);
 dragon.setDawg(dawg);
+dawg.setPlayer(player);
 const landGen = new LandGenerator();
 const inputBox = new InputBox();
 inputBox.setMrBob(mrBob);
@@ -62,6 +63,7 @@ window.addEventListener('keyup', (e) => {
 
 function gameLoop() {
     player.update();
+    if (dawg.shouldFollow) dawg.followPlayer();
     
     cameraX = player.x - canvas.width / 2;
     cameraY = player.y - canvas.height / 2;
@@ -87,6 +89,56 @@ function gameLoop() {
     
     requestAnimationFrame(gameLoop);
 }
+
+window.startDarkening = function(options = {}) {
+    // options: { maxLevel: number(0..1), speed: ms increment interval, onComplete: fn }
+    if (!darknessOverlay) return;
+    const maxLevel = (typeof options.maxLevel === 'number') ? Math.max(0, Math.min(1, options.maxLevel)) : 0.6;
+    const speed = options.speed || 120;
+    const onComplete = options.onComplete;
+
+    darknessOverlay.style.display = 'block';
+    darknessOverlay.style.setProperty('--darkness-level', '0');
+    let level = 0;
+    const interval = setInterval(() => {
+        level += 0.02;
+        if (level >= maxLevel) level = maxLevel;
+        darknessOverlay.style.setProperty('--darkness-level', String(level));
+        if (level >= maxLevel) {
+            clearInterval(interval);
+            if (typeof onComplete === 'function') onComplete();
+        }
+    }, speed);
+    return () => clearInterval(interval); 
+};
+
+window.setDarknessLevel = function(targetLevel = 0.45, speed = 120, onComplete) {
+    if (!darknessOverlay) return;
+    darknessOverlay.style.display = 'block';
+    const current = parseFloat(getComputedStyle(darknessOverlay).getPropertyValue('--darkness-level')) || 0;
+    let level = current;
+    const step = 0.02;
+    const increasing = targetLevel > current;
+
+    const interval = setInterval(() => {
+        if (increasing) {
+            level += step;
+            if (level >= targetLevel) level = targetLevel;
+        } else {
+            level -= step;
+            if (level <= targetLevel) level = targetLevel;
+        }
+        darknessOverlay.style.setProperty('--darkness-level', String(level));
+        if (level === targetLevel) {
+            clearInterval(interval);
+            if (targetLevel === 0) {
+                darknessOverlay.style.display = 'none';
+            }
+            if (typeof onComplete === 'function') onComplete();
+        }
+    }, speed);
+    return () => clearInterval(interval);
+};
 
 let imagesLoaded = 0;
 const totalImages = 10;

@@ -30,13 +30,6 @@ class MrBob {
         if (inputContainer) {
             inputContainer.style.display = 'flex';
             this.inputBoxShown = true;
-            
-            // Start dawg dialogue after showing input box
-            if (this.dawg && this.conversationState === 'finished') {
-                setTimeout(() => {
-                    this.dawg.startDialogue();
-                }, 500);
-            }
         }
     }
 

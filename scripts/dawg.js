@@ -18,6 +18,9 @@ class Dawg {
         this.moveStartTime = 0;
         this.dragonEncounterTriggered = false;
         this.dragon = null;
+        this.player = null;
+        this.shouldFollow = false;
+        this.followDistance = 48;
     }
 
     setDragon(dragon) {
@@ -28,6 +31,10 @@ class Dawg {
         this.x = x;
         this.y = y;
         this.isVisible = true;
+    }
+
+    setPlayer(player) {
+        this.player = player;
     }
 
     hide() {
@@ -52,6 +59,22 @@ class Dawg {
                 inputContainer.style.display = 'flex';
             }
         }
+    }
+
+    // This sequence should run only after the dragon has disappeared and night has begun
+    startNightSequence() {
+        if (this.dialogueStarted) return;
+        this.dialogueStarted = true;
+
+        this.addMessage("hmm... seems like night's coming earlier though...");
+
+        setTimeout(() => {
+            this.addMessage("so, just cause bob told me to be with you, I'll spend tonight with you");
+        }, 1400);
+
+        setTimeout(() => {
+            this.showThanksOrNahOptions();
+        }, 2800);
     }
     
     addMessage(text) {
@@ -80,6 +103,56 @@ class Dawg {
                 this.isMoving = true;
                 this.moveStartTime = Date.now();
                 break;
+        }
+    }
+
+    showThanksOrNahOptions() {
+        const optionSelector = document.getElementById('optionSelector');
+        const opt1 = document.getElementById('option1');
+        const opt2 = document.getElementById('option2');
+        if (!optionSelector || !opt1 || !opt2) return;
+
+        opt1.textContent = 'thanks...';
+        opt2.textContent = "nah I'll be fine";
+        optionSelector.style.display = 'flex';
+
+        const cleanup = () => {
+            optionSelector.style.display = 'none';
+            opt1.onclick = null;
+            opt2.onclick = null;
+        };
+
+        opt1.onclick = () => {
+            cleanup();
+            this.addMessage('aww, thanks human...');
+            this.shouldFollow = true;
+            if (window.startDarkening) window.startDarkening();
+        };
+
+        opt2.onclick = () => {
+            cleanup();
+            this.addMessage('you do you human...');
+            if (window.startDarkening) window.startDarkening();
+            setTimeout(() => {
+                this.addMessage('...');
+                // hide dawg
+                this.hide();
+            }, 900);
+        };
+    }
+
+    followPlayer() {
+        if (!this.player) return;
+        const targetX = this.player.x - this.followDistance;
+        const targetY = this.player.y;
+
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const speed = 1.8;
+        if (dist > 1) {
+            this.x += (dx / dist) * Math.min(speed, dist);
+            this.y += (dy / dist) * Math.min(speed, dist);
         }
     }
 

@@ -114,26 +114,51 @@ class Dragon {
                         this.addMessage("I prefer to call it...");
                         
                         setTimeout(() => {
-                            this.enableDarknessMode();
-                            
-                            setTimeout(() => {
+                            if (window.startDarkening) {
+                                window.startDarkening({ maxLevel: 1.0, speed: 90, onComplete: () => {
+                                    this.addMessage("ditty...");
+
+                                    setTimeout(() => {
+                                        
+                                        if (window.setDarknessLevel) {
+                                            window.setDarknessLevel(0.45, 120, () => {
+                                                this.addMessage("so human, you better be careful out there in the dark...");
+                                                setTimeout(() => {
+                                                    this.isVisible = false;
+                                                    setTimeout(() => {
+                                                        if (this.dawg && typeof this.dawg.startNightSequence === 'function') {
+                                                            this.dawg.startNightSequence();
+                                                        }
+                                                    }, 800);
+                                                }, 2000);
+                                            });
+                                        } else {
+                                            this.addMessage("so human, you better be careful out there in the dark...");
+                                            setTimeout(() => {
+                                                this.isVisible = false;
+                                                setTimeout(() => {
+                                                    if (this.dawg && typeof this.dawg.startNightSequence === 'function') {
+                                                        this.dawg.startNightSequence();
+                                                    }
+                                                }, 800);
+                                            }, 2000);
+                                        }
+                                    }, 900);
+                                }});
+                            } else {
                                 this.addMessage("ditty...");
-                                
                                 setTimeout(() => {
                                     this.addMessage("so human, you better be careful out there in the dark...");
-                                    
                                     setTimeout(() => {
-                                        this.disableDarknessMode();
                                         this.isVisible = false;
-                                        
                                         setTimeout(() => {
                                             if (this.dawg) {
-                                                this.dawg.afterDragonLeaves();
+                                                this.dawg.startNightSequence();
                                             }
-                                        }, 1000);
-                                    }, 3000);
+                                        }, 800);
+                                    }, 2000);
                                 }, 2000);
-                            }, 1500);
+                            }
                         }, 2000);
                     }, 2500);
                 }, 2500);
