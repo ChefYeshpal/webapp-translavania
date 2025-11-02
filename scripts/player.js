@@ -22,6 +22,8 @@ class Player {
             ArrowDown: false,
             ArrowRight: false
         };
+        
+        this.controlsDisabled = false;
     }
     handleKeyDown(key) {
         if (key in this.keys) {
@@ -41,6 +43,10 @@ class Player {
     }
 
     update() {
+        if (this.controlsDisabled) {
+            return;
+        }
+        
         if (this.keys.w || this.keys.ArrowUp) {
             this.y -= this.speed;
         }

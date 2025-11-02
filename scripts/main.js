@@ -6,18 +6,25 @@ const player = new Player(400, 300);
 const dawg = new Dawg();
 const dragon = new Dragon();
 const mrBob = new MrBob();
+const chungus = new Chungus();
 mrBob.setDawg(dawg);
 dawg.setDragon(dragon);
 dragon.setDawg(dawg);
 dawg.setPlayer(player);
+chungus.setPlayer(player);
+chungus.setDawg(dawg);
 const landGen = new LandGenerator();
 const inputBox = new InputBox();
 inputBox.setMrBob(mrBob);
 inputBox.setDragon(dragon);
 dragon.setInputBox(inputBox);
+chungus.setInputBox(inputBox);
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
 window.player = player;
+
+let isDarkMode = false;
+let lastFrameTime = Date.now();
 
 window.ans = function(answer) {
     mrBob.respondToPlayer(answer);
@@ -62,8 +69,13 @@ window.addEventListener('keyup', (e) => {
 });
 
 function gameLoop() {
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastFrameTime;
+    lastFrameTime = currentTime;
+    
     player.update();
     if (dawg.shouldFollow) dawg.followPlayer();
+    chungus.update(deltaTime, isDarkMode, canvas);
     
     cameraX = player.x - canvas.width / 2;
     cameraY = player.y - canvas.height / 2;
@@ -86,6 +98,7 @@ function gameLoop() {
     dawg.draw(ctx, cameraX, cameraY);
     dragon.draw(ctx, cameraX, cameraY);
     mrBob.draw(ctx, cameraX, cameraY);
+    chungus.draw(ctx, cameraX, cameraY, canvas);
     
     requestAnimationFrame(gameLoop);
 }
@@ -106,6 +119,8 @@ window.startDarkening = function(options = {}) {
         darknessOverlay.style.setProperty('--darkness-level', String(level));
         if (level >= maxLevel) {
             clearInterval(interval);
+            isDarkMode = true;
+            chungus.startTracking();
             if (typeof onComplete === 'function') onComplete();
         }
     }, speed);
@@ -133,6 +148,9 @@ window.setDarknessLevel = function(targetLevel = 0.45, speed = 120, onComplete) 
             clearInterval(interval);
             if (targetLevel === 0) {
                 darknessOverlay.style.display = 'none';
+                isDarkMode = false;
+            } else if (targetLevel > 0.3) {
+                isDarkMode = true;
             }
             if (typeof onComplete === 'function') onComplete();
         }
@@ -141,7 +159,7 @@ window.setDarknessLevel = function(targetLevel = 0.45, speed = 120, onComplete) 
 };
 
 let imagesLoaded = 0;
-const totalImages = 10;
+const totalImages = 11;
 
 function checkImagesLoaded() {
     imagesLoaded++;
@@ -186,6 +204,16 @@ if (dragon.image.complete) {
 } else {
     dragon.image.addEventListener('load', () => {
         dragon.imageLoaded = true;
+        checkImagesLoaded();
+    });
+}
+
+if (chungus.image.complete) {
+    chungus.imageLoaded = true;
+    checkImagesLoaded();
+} else {
+    chungus.image.addEventListener('load', () => {
+        chungus.imageLoaded = true;
         checkImagesLoaded();
     });
 }
