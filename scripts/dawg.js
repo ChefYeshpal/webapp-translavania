@@ -103,7 +103,7 @@ class Dawg {
                 
                 setTimeout(() => {
                     if (this.dragon) {
-                        this.dragon.addMessage("shut up dog, what's that?");
+                        this.dragon.addMessage("What was that?");
                     }
                     
                     setTimeout(() => {
