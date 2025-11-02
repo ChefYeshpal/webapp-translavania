@@ -227,25 +227,51 @@ class Dawg {
     }
     
     afterDragonLeaves() {
-        this.addMessage("wowzers... that was a rollercoster huh...");
+        this.addMessage("well... she's a little climactic, but dont worry about it");
         
         setTimeout(() => {
-            this.addMessage("anyways, she forgot to tell you to stay away from trees during the night");
+            this.addMessage("just, dont try to be around trees when it's night, not a good thing to get stuck in");
             
             setTimeout(() => {
-                this.addMessage("I honestly prefer to burrow into a hole and stay there...");
-                
-                setTimeout(() => {
-                    if (this.dragon && this.dragon.inputBox) {
-                        this.dragon.inputBox.showOptions(
-                            "1. okay...",
-                            "2. can I come in your hole?",
-                            (choice) => this.handleHoleChoice(choice)
-                        );
-                    }
-                }, 2000);
+                if (window.startDarkening) {
+                    window.startDarkening({ maxLevel: 0.75, speed: 100, onComplete: () => {
+                        setTimeout(() => {
+                            this.addMessage("hmm... seems like the night's coming in earlier...");
+                            
+                            setTimeout(() => {
+                                this.addMessage("I usually spend the night in a hole");
+                                
+                                setTimeout(() => {
+                                    this.addMessage("but cause bob told me to be with you, I can spent tonight with you");
+                                    
+                                    setTimeout(() => {
+                                        if (this.dragon && this.dragon.inputBox) {
+                                            this.dragon.inputBox.showOptions(
+                                                "1. thanks...",
+                                                "2. nah, i'll be fine",
+                                                (choice) => this.handleNightChoice(choice)
+                                            );
+                                        }
+                                    }, 2000);
+                                }, 2500);
+                            }, 2500);
+                        }, 1000);
+                    }});
+                }
             }, 2500);
         }, 2000);
+    }
+    
+    handleNightChoice(choice) {
+        if (choice === 1) {
+            this.addMessage("aww, no problem human!");
+            this.shouldFollow = true;
+        } else if (choice === 2) {
+            this.addMessage("alright then, you do you...");
+            setTimeout(() => {
+                this.addMessage("I'll be nearby if you need me though");
+            }, 1500);
+        }
     }
     
     handleHoleChoice(choice) {

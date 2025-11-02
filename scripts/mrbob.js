@@ -119,6 +119,12 @@ class MrBob {
                         window.player.clearAllKeys();
                     }
                     this.showInputBox();
+                    
+                    setTimeout(() => {
+                        if (this.dawg) {
+                            this.dawg.startDialogue();
+                        }
+                    }, 500);
                 } else if (lowerAnswer.includes('nah') || lowerAnswer.includes('nope') || lowerAnswer.includes('no way')) {
                     if (!this.secondChanceGiven) {
                         console.log("Mr. Bob: You know what? Fuck you, I ain't gonna help you no more if you don't respect her GOT IT?");
