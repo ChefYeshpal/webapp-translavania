@@ -44,3 +44,10 @@
 - 1 Nov 2025
     - Updated the dialogue system a LOT more
     - Added some more lore, I think there's a lotta characters but anyways....
+    - Updated question asking system more
+        - Yeah it's not the best rn, I gotta lock in
+    - Console ans function stopped working for a moment
+        - why the hell did I remoe it?
+    - Added rickroll
+- 2 Nov 2025
+    -
