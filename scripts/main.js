@@ -25,6 +25,15 @@ window.player = player;
 
 let isDarkMode = false;
 let lastFrameTime = Date.now();
+let gamePaused = false;
+
+window.pauseGame = function() {
+    gamePaused = true;
+};
+
+window.resumeGame = function() {
+    gamePaused = false;
+};
 
 window.ans = function(answer) {
     mrBob.respondToPlayer(answer);
@@ -73,24 +82,29 @@ function gameLoop() {
     const deltaTime = currentTime - lastFrameTime;
     lastFrameTime = currentTime;
     
-    player.update();
-    if (dawg.shouldFollow) dawg.followPlayer();
-    chungus.update(deltaTime, isDarkMode, canvas);
-    
-    cameraX = player.x - canvas.width / 2;
-    cameraY = player.y - canvas.height / 2;
-    
-    if (darknessOverlay && darknessOverlay.style.display !== 'none') {
-        const rect = canvas.getBoundingClientRect();
-        const screenX = rect.left + canvas.width / 2;
-        const screenY = rect.top + canvas.height / 2;
-        darknessOverlay.style.setProperty('--mouse-x', `${screenX}px`);
-        darknessOverlay.style.setProperty('--mouse-y', `${screenY}px`);
+    // Only update game logic if not paused
+    if (!gamePaused) {
+        player.update();
+        if (dawg.shouldFollow) dawg.followPlayer();
+        chungus.update(deltaTime, isDarkMode, canvas);
+        
+        cameraX = player.x - canvas.width / 2;
+        cameraY = player.y - canvas.height / 2;
+        
+        if (darknessOverlay && darknessOverlay.style.display !== 'none') {
+            const rect = canvas.getBoundingClientRect();
+            const screenX = rect.left + canvas.width / 2;
+            const screenY = rect.top + canvas.height / 2;
+            darknessOverlay.style.setProperty('--mouse-x', `${screenX}px`);
+            darknessOverlay.style.setProperty('--mouse-y', `${screenY}px`);
+        }
+        
+        mrBob.update(player, landGen, cameraX, cameraY, canvas.width, canvas.height);
+        dawg.update();
+        landGen.updateChunks(cameraX, cameraY, canvas.width, canvas.height);
     }
     
-    mrBob.update(player, landGen, cameraX, cameraY, canvas.width, canvas.height);
-    dawg.update();
-    landGen.updateChunks(cameraX, cameraY, canvas.width, canvas.height);
+    // Always draw, even when paused
     ctx.fillStyle = '#4a7c2e';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     landGen.draw(ctx, cameraX, cameraY, canvas.width, canvas.height, player.y);

@@ -71,7 +71,7 @@ class Dragon {
             this.addMessage("who are you? why are you even here huh?");
             this.conversationState = 'greeted';
         } else if (choice === 2) {
-            this.addMessage("and... who's that person? what are they doing here?");
+            this.addMessage("...");
             this.conversationState = 'silent';
         }
         
@@ -99,7 +99,7 @@ class Dragon {
     }
     
     explainTheLand() {
-        this.addMessage("OH... you should know something then... this land is... cursed, one might say");
+        this.addMessage("Oh... you should know something then... this land is... cursed, one might say");
         
         setTimeout(() => {
             this.addMessage("there exists a creature which lurks in the darkness");

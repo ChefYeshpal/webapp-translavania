@@ -12,7 +12,7 @@ class Chungus {
         };
         this.isVisible = false;
         this.isFollowing = false;
-        this.followSpeed = 2.5;
+        this.followSpeed = 1.5;
         this.player = null;
         this.dawg = null;
         this.inputBox = null;
@@ -77,11 +77,11 @@ class Chungus {
             const dy = this.player.y - this.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance > 5) {
+            if (distance <= 35) {
+                this.catchPlayer();
+            } else {
                 this.x += (dx / distance) * this.followSpeed;
                 this.y += (dy / distance) * this.followSpeed;
-            } else {
-                this.catchPlayer();
             }
         }
     }
@@ -90,21 +90,19 @@ class Chungus {
         this.encounterActive = true;
         this.encounterCount++;
         
-        // Disable player controls
+        // Disable player controls FIRST
         if (this.player) {
             this.player.clearAllKeys();
             this.player.controlsDisabled = true;
         }
         
-        this.isVisible = true;
-        this.screenX = canvas.width - this.width - 20;
-        this.screenY = canvas.height - this.height - 20;
-        
-        this.x = this.player.x + 200;
-        this.y = this.player.y + 200;
-        
-        // Dawg dialogue
         setTimeout(() => {
+            this.isVisible = true;
+            this.screenX = canvas.width - this.width - 20; 
+            this.screenY = 20;
+            this.x = this.player.x + 300;
+            this.y = this.player.y - 200;
+            
             if (this.dawg) {
                 this.dawg.addMessage("uhh human?");
                 
@@ -112,137 +110,167 @@ class Chungus {
                     this.dawg.addMessage("I think there's something there...");
                     
                     setTimeout(() => {
-                        if (this.inputBox) {
-                            this.inputBox.showOptions(
-                                "1. I see it...",
-                                "2. stop kidding with me",
-                                (choice) => this.handleFirstChoice(choice)
-                            );
+                        if (this.player) {
+                            this.player.controlsDisabled = false;
                         }
-                    }, 1500);
-                }, 1500);
+                        
+                        setTimeout(() => {
+                            if (this.inputBox) {
+                                this.inputBox.showOptions(
+                                    "1. I see it...",
+                                    "2. stop kidding with me",
+                                    (choice) => this.handleFirstChoice(choice)
+                                );
+                            }
+                        }, 800);
+                    }, 400);
+                }, 1200);
             }
-        }, 500);
+        }, 800);
     }
     
     handleFirstChoice(choice) {
         if (choice === 1) {
-            // Player sees it
             if (this.dawg) {
-                this.dawg.addMessage("should we run or fight that?");
+                this.dawg.addMessage("yeah... I see it too");
                 
                 setTimeout(() => {
-                    if (this.inputBox) {
-                        this.inputBox.showOptions(
-                            "1. yes",
-                            "2. run",
-                            (choice) => this.handleFightOrRunChoice(choice)
-                        );
-                    }
-                }, 1500);
+                    this.dawg.addMessage("should we run or fight it?");
+                    
+                    setTimeout(() => {
+                        if (this.inputBox) {
+                            this.inputBox.showOptions(
+                                "1. fight",
+                                "2. run",
+                                (choice) => this.handleFightOrRunChoice(choice)
+                            );
+                        }
+                    }, 1000);
+                }, 1000);
             }
         } else if (choice === 2) {
-            // Player dismisses it
             if (this.dawg) {
-                this.dawg.addMessage("oh... probably some kind of an illusion then...");
+                this.dawg.addMessage("I... I don't think that's an illusion human");
                 
                 setTimeout(() => {
-                    if (this.player) {
-                        this.player.controlsDisabled = false;
-                    }
+                    this.dawg.addMessage("IT'S MOVING!");
                     
-                    // Hide creature from corner but keep it in world (far distance)
-                    this.isVisible = false;
-                    this.x = this.player.x + 300;
-                    this.y = this.player.y + 300;
-                    
-                    // Start following from a distance
-                    this.isFollowing = true;
-                    this.followSpeed = 0.8; // Slower follow when dismissed
-                    
-                    // Reset for next encounter
-                    this.encounterActive = false;
-                    this.movementTimer = 0;
-                }, 1500);
+                    setTimeout(() => {
+                        this.dawg.addMessage("RUN!");
+                        
+                        setTimeout(() => {
+                            if (this.player) {
+                                this.player.controlsDisabled = false;
+                            }
+                            
+                            this.isVisible = false;
+                            this.isFollowing = true;
+                            this.followSpeed = 1.2;
+                            this.encounterActive = false;
+                        }, 800);
+                    }, 1000);
+                }, 1200);
             }
         }
     }
     
     handleFightOrRunChoice(choice) {
         if (choice === 1) {
-            // Fight - dawg rushes and dies
+            // Dawg dies in this scenario, you MONSTER!
             if (this.dawg) {
-                this.dawg.addMessage("alright, let's do this!");
+                this.dawg.addMessage("alright, I'll take it on!");
                 
                 setTimeout(() => {
-                    // Move dawg towards creature
-                    const moveInterval = setInterval(() => {
-                        if (this.dawg && !this.isDawgDead) {
-                            const dx = this.x - this.dawg.x;
-                            const dy = this.y - this.dawg.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            
-                            if (distance > 10) {
-                                this.dawg.x += (dx / distance) * 3;
-                                this.dawg.y += (dy / distance) * 3;
-                            } else {
-                                clearInterval(moveInterval);
-                                // Dawg circles the creature briefly then disappears
-                                setTimeout(() => {
-                                    this.dawg.isVisible = false;
-                                    this.isDawgDead = true;
-                                    this.dawg.addMessage("dawg is dead.");
+                    this.dawg.addMessage("you better run if this goes bad...");
+                    
+                    setTimeout(() => {
+                        const moveInterval = setInterval(() => {
+                            if (this.dawg && !this.isDawgDead) {
+                                const dx = this.x - this.dawg.x;
+                                const dy = this.y - this.dawg.y;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+                                
+                                if (distance > 10) {
+                                    this.dawg.x += (dx / distance) * 3.5;
+                                    this.dawg.y += (dy / distance) * 3.5;
+                                } else {
+                                    clearInterval(moveInterval);
                                     
-                                    // Hide creature
-                                    this.isVisible = false;
-                                    this.encounterActive = false;
-                                    
-                                    // Re-enable controls
-                                    if (this.player) {
-                                        this.player.controlsDisabled = false;
-                                    }
-                                }, 1000);
+                                    setTimeout(() => {
+                                        this.dawg.addMessage("I... I can't...");
+                                        
+                                        setTimeout(() => {
+                                            this.dawg.isVisible = false;
+                                            this.isDawgDead = true;
+                                            this.dawg.addMessage("dawg is dead.");
+                                            
+                                            setTimeout(() => {
+                                                this.dawg.addMessage("...");
+                                                
+                                                setTimeout(() => {
+                                                    this.dawg.addMessage("run...");
+                                                    
+                                                    setTimeout(() => {
+                                                        if (this.player) {
+                                                            this.player.controlsDisabled = false;
+                                                        }
+                                                        
+                                                        this.isVisible = false;
+                                                        this.isFollowing = true;
+                                                        this.followSpeed = 1.5;
+                                                        this.encounterActive = false;
+                                                    }, 800);
+                                                }, 1000);
+                                            }, 800);
+                                        }, 600);
+                                    }, 800);
+                                }
                             }
-                        }
-                    }, 16);
-                }, 1000);
+                        }, 16);
+                    }, 1000);
+                }, 1200);
             }
         } else if (choice === 2) {
-            // Run - creature chases player
+            // Run - immediate chase
             if (this.dawg) {
-                this.dawg.addMessage("okay, RUN!");
+                this.dawg.addMessage("good call, let's GO!");
                 
                 setTimeout(() => {
-                    // Re-enable controls so player can run
                     if (this.player) {
                         this.player.controlsDisabled = false;
                     }
                     
-                    // Creature starts following
-                    this.isFollowing = true;
-                    this.followSpeed = 2.5;
-                    
-                    // Hide from corner (it's now in the world)
                     this.isVisible = false;
+                    this.isFollowing = true;
+                    this.followSpeed = 1.4;
                     this.encounterActive = false;
-                }, 1000);
+                }, 600);
             }
         }
     }
     
     catchPlayer() {
-        // TODO: Implement what happens when creature catches player
-        // Left for later as per user request
         this.isFollowing = false;
+        if (this.player) {
+            this.player.controlsDisabled = true;
+            this.player.clearAllKeys();
+        }
+        if (window.pauseGame) {
+            window.pauseGame();
+        }
+        
         if (this.dawg && !this.isDawgDead) {
             this.dawg.addMessage("oh no... it caught you!");
+        } else {
+            setTimeout(() => {
+                alert("You were caught by the creature...");
+            }, 500);
         }
     }
     
     draw(ctx, cameraX, cameraY, canvas) {
         if (!this.imageLoaded) return;
         
-        // Draw in screen space (bottom right corner) when visible
         if (this.isVisible && this.encounterActive) {
             ctx.drawImage(
                 this.image,
@@ -253,7 +281,6 @@ class Chungus {
             );
         }
         
-        // Draw in world space when following
         if (this.isFollowing) {
             ctx.drawImage(
                 this.image,

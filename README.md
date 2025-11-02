@@ -51,3 +51,6 @@
     - Added rickroll
 - 2 Nov 2025
     -
+
+# What did I make with ai?
+Chungus.js was made almost entirely with ai (As of writing), but I'm gonna be working on it and updating the code more by hand
