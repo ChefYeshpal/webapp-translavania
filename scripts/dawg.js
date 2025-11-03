@@ -135,7 +135,6 @@ class Dawg {
             if (window.startDarkening) window.startDarkening();
             setTimeout(() => {
                 this.addMessage('...');
-                // hide dawg
                 this.hide();
             }, 900);
         };
@@ -188,7 +187,7 @@ class Dawg {
                             }
                             
                             setTimeout(() => {
-                                this.addMessage("anyways, she's a cool species, just dont try to skibdi rizz her will you?");
+                                this.addMessage("anyways, she's a cool species, just dont try to rizz her will you?");
                                 
                                 setTimeout(() => {
                                     if (this.dragon) {
@@ -227,7 +226,7 @@ class Dawg {
     }
     
     afterDragonLeaves() {
-        this.addMessage("well... she's a little climactic, but dont worry about it");
+        this.addMessage("well... she's a little cinematic, but dont worry about it");
         
         setTimeout(() => {
             this.addMessage("just, dont try to be around trees when it's night, not a good thing to get stuck in");
