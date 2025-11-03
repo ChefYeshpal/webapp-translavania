@@ -19,7 +19,7 @@ Super simple, just use `wasd` or arrow keys to move, you can select an option vi
     - [ ] night time cricket music
     - [ ] chase music for when chungus chases you
 - [ ] Chase thingys
-    - [ ] Trees should become obsticales in the way when the user is running away
+    - [ ] Trees should become obstacle in the way when the user is running away
     - [ ] There could be some messages in the text thingy where chungus tries to say that he's just wanting to talk
 
 ## Devlogs
