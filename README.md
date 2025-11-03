@@ -1,7 +1,13 @@
 
 # webapp-translavania
 
+
+## How to play?
+
+Super simple, just use `wasd` or arrow keys to move, you can select an option via keypress of 1 or 2, or you can just select via mouse and press enter to send. To talk with mr. bob, you will need to use the console and the function would be `ans('answer here')`. Not a lot, but it's honest work :>
+
 ## Tech Stack
+
 - HTML5 Canvas
 - Vanilla JavaScript
 - CSS3
@@ -12,6 +18,9 @@
 - [ ] background music
     - [ ] night time cricket music
     - [ ] chase music for when chungus chases you
+- [ ] Chase thingys
+    - [ ] Trees should become obsticales in the way when the user is running away
+    - [ ] There could be some messages in the text thingy where chungus tries to say that he's just wanting to talk
 
 ## Devlogs
 
