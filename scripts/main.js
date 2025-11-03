@@ -43,11 +43,6 @@ window.ans = function(answer) {
     mrBob.respondToPlayer(answer);
 };
 
-// I didn't wanna play test it anymore, so just adding this to test the dogs death
-window.testDogDeath = function() {
-    chungus.showDawgDeathGameOver();
-};
-
 const darknessOverlay = document.getElementById('darknessOverlay');
 window.addEventListener('mousemove', (e) => {
     if (darknessOverlay && darknessOverlay.style.display !== 'none') {
