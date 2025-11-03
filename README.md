@@ -8,10 +8,10 @@
 
 ## What I wanna add
 
-- [] smol animals teetering about
-- [] background music
-    - [] night time cricket music
-    - [] chase music for when chungus chases you
+- [ ] smol animals teetering about
+- [ ] background music
+    - [ ] night time cricket music
+    - [ ] chase music for when chungus chases you
 
 ## Devlogs
 
@@ -67,3 +67,8 @@
     
 Here's a fun little thing: If you use vim, then open it and type in :smile
 You'll like it, and if you use nvim... you can do the same thing. Though results may vary...
+
+## Am I satisfied with this project?
+
+Honestly, not entirely. I wanted to make a full fledged game but then realised why it takes a long *long* time for games to actually be made. I was a little bogged down due to some upcoming exams but I'm content with what I've created right now. Although I do want to add more stuff in this :|
+But since the siege week has ended, I guess I'll have to submit this project, thanks for checking it out :)
