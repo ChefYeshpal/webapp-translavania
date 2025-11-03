@@ -7,18 +7,22 @@ const dawg = new Dawg();
 const dragon = new Dragon();
 const mrBob = new MrBob();
 const chungus = new Chungus();
+const landGen = new LandGenerator();
+const inputBox = new InputBox();
+
+// Set up relationships cause I aint getting any anytime soon :')
 mrBob.setDawg(dawg);
 dawg.setDragon(dragon);
 dragon.setDawg(dawg);
 dawg.setPlayer(player);
 chungus.setPlayer(player);
 chungus.setDawg(dawg);
-const landGen = new LandGenerator();
-const inputBox = new InputBox();
+chungus.setInputBox(inputBox);
+chungus.setMrBob(mrBob);
 inputBox.setMrBob(mrBob);
 inputBox.setDragon(dragon);
 dragon.setInputBox(inputBox);
-chungus.setInputBox(inputBox);
+
 let cameraX = player.x - canvas.width / 2;
 let cameraY = player.y - canvas.height / 2;
 window.player = player;
@@ -37,6 +41,11 @@ window.resumeGame = function() {
 
 window.ans = function(answer) {
     mrBob.respondToPlayer(answer);
+};
+
+// I didn't wanna play test it anymore, so just adding this to test the dogs death
+window.testDogDeath = function() {
+    chungus.showDawgDeathGameOver();
 };
 
 const darknessOverlay = document.getElementById('darknessOverlay');
@@ -86,7 +95,7 @@ function gameLoop() {
     if (!gamePaused) {
         player.update();
         if (dawg.shouldFollow) dawg.followPlayer();
-        chungus.update(deltaTime, isDarkMode, canvas);
+        chungus.update(deltaTime, isDarkMode);
         
         cameraX = player.x - canvas.width / 2;
         cameraY = player.y - canvas.height / 2;
@@ -112,7 +121,7 @@ function gameLoop() {
     dawg.draw(ctx, cameraX, cameraY);
     dragon.draw(ctx, cameraX, cameraY);
     mrBob.draw(ctx, cameraX, cameraY);
-    chungus.draw(ctx, cameraX, cameraY, canvas);
+    chungus.draw(ctx, cameraX, cameraY);
     
     requestAnimationFrame(gameLoop);
 }
@@ -134,7 +143,7 @@ window.startDarkening = function(options = {}) {
         if (level >= maxLevel) {
             clearInterval(interval);
             isDarkMode = true;
-            chungus.startTracking();
+            chungus.startSpawnTimer();
             if (typeof onComplete === 'function') onComplete();
         }
     }, speed);
