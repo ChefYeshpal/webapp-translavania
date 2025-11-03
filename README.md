@@ -63,3 +63,7 @@
         - Added a special game over screen if dog dies
     - I think the chase phase it a LOT more cohesive now... Otherwise it felt clanky (I dont mean it like that) for some reason...
         - Though the user can't really see chungus that easily, but it could also be that my laptop monitor is absolute dog poop, besides, the j*b application jumpscare can feel random cause of this
+
+    
+Here's a fun little thing: If you use vim, then open it and type in :smile
+You'll like it, and if you use nvim... you can do the same thing. Though results may vary...
