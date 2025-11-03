@@ -1,14 +1,17 @@
 
 # webapp-translavania
 
-
+## Tech Stack
+- HTML5 Canvas
+- Vanilla JavaScript
+- CSS3
 
 ## What I wanna add
 
-- A creature thingy that the user runs away from
-- forest generation
-- grassland generation
-- smol animals teetering about
+- [] smol animals teetering about
+- [] background music
+    - [] night time cricket music
+    - [] chase music for when chungus chases you
 
 ## Devlogs
 
@@ -50,7 +53,13 @@
         - why the hell did I remoe it?
     - Added rickroll
 - 2 Nov 2025
-    -
-
-# What did I make with ai?
-Chungus.js was made almost entirely with ai (As of writing), but I'm gonna be working on it and updating the code more by hand
+    - Added chungus logic
+        - The guy chases you aroung
+        - When he catches you, the game over screen is a j*b application
+        - Will work on his chase mechanics a bit more, it feels a little clanky for some reason
+- 3 Nov 2025
+    - I'ma rewrite the entire chungus file in an hour :p
+        - Added normal game over screen which has a job application
+        - Added a special game over screen if dog dies
+    - I think the chase phase it a LOT more cohesive now... Otherwise it felt clanky (I dont mean it like that) for some reason...
+        - Though the user can't really see chungus that easily, but it could also be that my laptop monitor is absolute dog poop, besides, the j*b application jumpscare can feel random cause of this
